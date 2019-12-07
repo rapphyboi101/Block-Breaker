@@ -7,9 +7,24 @@ public class Block : MonoBehaviour {
     //config parameters
     [SerializeField] AudioClip breakSound;
 
+    //cached reference
+    LevelChanger level;
+
+    private void Start()
+    {
+        level = FindObjectOfType<LevelChanger>();
+        level.CountBreakableBlocks();
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
+    {
+        DestroyBlock();
+    }
+
+    private void DestroyBlock()
     {
         AudioSource.PlayClipAtPoint(breakSound, Camera.main.transform.position);
         Destroy(gameObject);
+        level.BlockDestroyed();
     }
 }
